@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 const cloudinary = require('cloudinary').v2;
+const router = require('express').Router();
 
 const usersRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
@@ -30,24 +31,26 @@ cloudinary.config({
   api_secret: config.CLOUDINARY_SECRET
 });
 
-app.use(cors());
-app.options('*', cors());
-app.use(bodyParser.json());
-app.use(morgan('tiny'));
+router.use(cors());
 
-app.use('/users', usersRouter);
-app.use('/login', loginRouter);
-app.use('/signup', signupRouter);
-app.use('/change-profile-pic', changeProfilePicRouter);
-app.use('/post', postRouter);
-app.use('/profile-posts', profilePostsRouter);
-app.use('/feed', feedRouter);
-app.use('/friendship', friendshipRouter);
-app.use('/', friendRouter);
+router.options('*', cors());
+router.use(bodyParser.json());
+router.use(morgan('tiny'));
 
-app.use(middleware.unknownEndpoint);
-app.use(middleware.errorHandler);
+router.use('/users', usersRouter);
+router.use('/login', loginRouter);
+router.use('/signup', signupRouter);
+router.use('/change-profile-pic', changeProfilePicRouter);
+router.use('/post', postRouter);
+router.use('/profile-posts', profilePostsRouter);
+router.use('/feed', feedRouter);
+router.use('/friendship', friendshipRouter);
+router.use('/', friendRouter);
 
+router.use(middleware.unknownEndpoint);
+router.use(middleware.errorHandler);
+
+app.use('/api', router)
 app.listen(config.PORT, () => console.log(`Listening on port: ${config.PORT}`));
 
 module.exports = app;
