@@ -17,11 +17,10 @@ const friendshipRouter = require('./controllers/friendship');
 
 const middleware = require('./utils/middlewares');
 const config = require('./utils/config');
-
 const app = express();
 
 mongoose
-  .connect(config.MONGODB_URI, { useNewUrlParser: true })
+  .connect(config.MONGODB_URI, { useNewUrlParser: true,  useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch(error => console.error('Error connecting to MongoDB:', error.message));
 
